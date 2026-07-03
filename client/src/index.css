@@ -99,11 +99,11 @@ button {
 .container {
   width: 100%;
 
-  max-width: 1180px;
+  /* max-width: 1180px; */
 
   display: grid;
 
-  grid-template-columns: 1fr 520px;
+  grid-template-columns: 1fr 2fr;
 
   gap: 70px;
 
@@ -662,6 +662,206 @@ textarea:disabled {
 
   .submit-btn {
     display: none;
+  }
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.nav-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  text-decoration: none;
+  background: white;
+  color: #111;
+  border: 3px solid #111;
+  padding: 14px 24px;
+  font-weight: 700;
+  box-shadow: 6px 6px 0 #111;
+  transition: all .25s ease;
+}
+
+.nav-btn:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 10px 10px 0 #111;
+}
+
+.nav-btn.active {
+  background: var(--yellow);
+}
+
+
+/* =========================================================
+   TABLE
+========================================================= */
+
+.table-wrapper {
+  margin-top: 30px;
+  overflow-x: auto;
+  border: 3px solid #111;
+  box-shadow: 8px 8px 0 #111;
+  background: white;
+}
+
+
+.contact-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+
+.contact-table thead {
+  background: #254786;
+  color: white;
+}
+
+.contact-table th,
+.contact-table td {
+  border: 2px solid #111;
+  padding: 16px;
+  text-align: left;
+}
+
+.contact-table th {
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+.contact-table tbody tr:nth-child(even) {
+  background: #fff8ef;
+}
+
+.contact-table tbody tr:hover {
+  background: #fff1be;
+}
+
+
+/* =========================================================
+   DELETE BUTTON
+========================================================= */
+
+.delete-btn {
+  border: 3px solid #111;
+  background: #ff5d5d;
+  color: white;
+  padding: 10px 18px;
+  font-weight: 700;
+  transition: all .25s ease;
+  box-shadow: 5px 5px 0 #111;
+}
+
+.delete-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 #111;
+}
+
+.delete-btn:active {
+  transform: translate(2px,2px);
+  box-shadow: none;
+}
+
+
+
+/* =========================================================
+   EMPTY STATE
+========================================================= */
+
+.empty-state {
+  padding: 80px 30px;
+  text-align: center;
+}
+
+.empty-state h3 {
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  color: #666;
+}
+
+
+/* =========================================================
+   LOADING
+========================================================= */
+
+.contact-card h2 {
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+
+  0% {
+    opacity: .4;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: .4;
+  }
+
+}
+
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width:1024px){
+
+  .nav-buttons{
+    justify-content:center;
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width:768px){
+
+  .nav-buttons{
+    flex-direction:column;
+  }
+
+  .nav-btn{
+    width:100%;
+    text-align:center;
+  }
+
+  .table-wrapper{
+    margin-top:20px;
+  }
+
+}
+
+
+
+@media (max-width:480px){
+
+  .contact-table th,
+  .contact-table td{
+    padding:12px;
+    font-size:14px;
+  }
+
+  .delete-btn{
+    width:100%;
+    padding:10px;
   }
 
 }

@@ -8,8 +8,4 @@ const router = Router();
 
 router.post("/", contactLimiter, validate(contactSchema), createContact);
 
-router.get("/", getAllContacts);
-
-router.delete("/:id", deleteContact);
-
 export default router;
