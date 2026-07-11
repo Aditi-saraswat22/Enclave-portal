@@ -3,9 +3,10 @@ import {createContact,deleteContact,getAllContacts,} from "../controllers/contac
 import validate from "../middlewares/validate.middleware.js";
 import contactLimiter from "../middlewares/rateLimit.middleware.js";
 import contactSchema from "../schemas/contact.schema.js";
+import upload from "../middlewares/upload.middleware.js";
 
 const router = Router();
 
-router.post("/", contactLimiter, validate(contactSchema), createContact);
+router.post("/", contactLimiter, upload.single("attachment"), validate(contactSchema), createContact);
 
 export default router;

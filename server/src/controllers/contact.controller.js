@@ -1,5 +1,7 @@
 import Contact from "../models/Contact.js";
 import logger from "../utils/logger.js";
+import { uploadToCloudinary } from "../utils/cloudinary.js";
+import { sendNotificationEmail } from "../utils/email.js";
 
 /**
  * @desc    Create Contact Message
@@ -7,9 +9,35 @@ import logger from "../utils/logger.js";
  */
 export const createContact = async (req, res, next) => {
   try {
-    const contact = await Contact.create(req.body);
+    let attachmentData = {};
+
+    // Upload attachment to Cloudinary if a file is provided in the request
+    if (req.file) {
+      logger.info(`Processing attachment upload: ${req.file.originalname}`);
+      const uploadResult = await uploadToCloudinary(
+        req.file.buffer,
+        req.file.originalname
+      );
+      attachmentData = {
+        attachmentUrl: uploadResult.secure_url,
+        attachmentPublicId: uploadResult.public_id,
+      };
+    }
+
+    // Merge request body and attachment details
+    const contactPayload = {
+      ...req.body,
+      ...attachmentData,
+    };
+
+    const contact = await Contact.create(contactPayload);
 
     logger.info(`New contact submitted by ${contact.email}`);
+
+    // Asynchronously send notification email (non-blocking)
+    sendNotificationEmail(contact).catch((err) => {
+      logger.error(`Deferred email notification failed: ${err.message}`);
+    });
 
     res.status(201).json({
       success: true,
@@ -22,12 +50,27 @@ export const createContact = async (req, res, next) => {
 };
 
 /**
- * @desc    Get All Contacts
+ * @desc    Get All Contacts (with optional query search filter)
  * @route   GET /api/contact
  */
 export const getAllContacts = async (req, res, next) => {
   try {
-    const contacts = await Contact.find().sort({
+    const { search } = req.query;
+    let query = {};
+
+    if (search) {
+      const searchRegex = new RegExp(search.trim(), "i");
+      query = {
+        $or: [
+          { name: searchRegex },
+          { email: searchRegex },
+          { subject: searchRegex },
+          { message: searchRegex },
+        ],
+      };
+    }
+
+    const contacts = await Contact.find(query).sort({
       createdAt: -1,
     });
 

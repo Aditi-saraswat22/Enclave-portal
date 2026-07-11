@@ -26,6 +26,16 @@ const contactSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+
+    attachmentUrl: {
+      type: String,
+      default: "",
+    },
+
+    attachmentPublicId: {
+      type: String,
+      default: "",
+    },
   },
   {
     timestamps: true,
