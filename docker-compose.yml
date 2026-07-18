@@ -1,0 +1,51 @@
+services:
+
+  mongodb:
+    image: mongo:latest
+    container_name: secure-contact-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./server
+      args:
+        - NODE_ENV=development
+    container_name: secure-contact-backend
+    ports:
+      - "8888:8888"
+    env_file:
+      - ./server/.env
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/secure-contact-db
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    command: npm run dev
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./client
+      target: development
+    container_name: secure-contact-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_BASE_URL=http://localhost:8888/api
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
